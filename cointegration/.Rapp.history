@@ -1,0 +1,413 @@
+da = read.table("d-bhp0206.txt", header = T)#
+da1 = read.table("d-vale0206.txt", header = T)#
+bhp = log(da$adjclose)#
+vale = log(da1$adjclose)#
+bhp1 = ts(bhp, frequency = 252, start = c(2002,127))#
+vale1 = ts(vale, frequency = 252, start = c(2002,127))
+quartz()#
+plot(bhp1, type ='l', col = "blue",ylim=c(0.45,3.7),ylab="Stock Price ($)", main= "Pairs Trading Example")#
+lines(vale1, type ='l', col = "red")#
+legend(2003, 3.5, c("BHP","Vale"), fill=c("blue","red"),cex =1.2,bty='n')
+mreg = lm(bhp~vale)#
+summary(mreg)
+x = cbind(bhp, vale)#
+m1 = ar(x)#
+m1$order#
+m2 = ca.jo(x, K = 2)#
+summary(m2)#
+m3 = ca.jo(x, K = 2, type = c("trace"))#
+summary(m3)
+library(urca)
+x = cbind(bhp, vale)#
+m1 = ar(x)#
+m1$order#
+m2 = ca.jo(x, K = 2)#
+summary(m2)#
+m3 = ca.jo(x, K = 2, type = c("trace"))#
+summary(m3)
+wt = bhp1 - 0.718 * vale1#
+quartz()#
+plot(wt, type = 'l', ylab = "wt = BHP - 0.72Vale", main = "Co-integration Relation")#
+abline(h = c(1.82), col = "red")#
+legend(2003, 1.95, c("wt", "E[wt] = 1.82"), fill = c("black","red"))
+quartz()#
+tsdisplay(wt)
+library(forecast)
+quartz()#
+tsdisplay(wt)
+# Using ETS#
+quartz()#
+plot(forecast(wt))#
+#
+quartz()#
+tsdiag(ets(wt))
+tsdiag(ets(wt))
+require(stats)
+tsdiag(ets(wt))
+quartz()#
+plot(forecast(wt))
+library(urca)#
+library(forecast)#
+require(stats)
+require(MTS)
+tsdiag(ets(wt))
+library(lattice)#
+library(foreign)#
+library(MASS)#
+library(car)#
+#
+require(stats4)#
+library(KernSmooth)#
+library(fastICA)#
+library(cluster)#
+library(leaps)#
+library(mgcv)#
+library(rpart)#
+library(pan)#
+library(mgcv)#
+library(DAAG)#
+library(TTR)#
+library(tis)#
+require("datasets")#
+require(graphics)#
+#
+#install.packages("astsa")#
+#require(astsa)#
+library(xtable)#
+# New libraries added:#
+library(stats)#
+library(TSA)#
+library(timeSeries)#
+library(fUnitRoots)#
+library(fBasics)#
+library(tseries)#
+library(timsac)#
+library(TTR)#
+library(fpp)#
+library(strucchange)#
+#library(MSBVAR)#
+library(vars)#
+library(lmtest)#
+library(dlnm)
+tsdiag(ets(wt))
+library(urca)
+tsdiag(ets(wt))
+library(tseries)#
+library(urca)#
+library(AER)
+data("PepperPrice")#
+plot(PepperPrice, plot.type = "single", col = 1:2)#
+legend("topleft", c("black", "white"), bty = "n",col = 1:2, lty = rep(1,2))
+adf.test(log(PepperPrice[, "white"]))
+pp.test(log(PepperPrice[, "white"]), type = "Z(t_alpha)")
+pepper_ers <- ur.ers(log(PepperPrice[, "white"]),#
+  type = "DF-GLS", model = "const", lag.max = 4)#
+summary(pepper_ers)
+kpss.test(log(PepperPrice[, "white"]))
+po.test(log(PepperPrice))#
+pepper_jo <- ca.jo(log(PepperPrice), ecdet = "const", type = "trace")#
+summary(pepper_jo)#
+pepper_jo2 <- ca.jo(log(PepperPrice), ecdet = "const", type = "eigen")#
+summary(pepper_jo2)
+data("PepperPrice")#
+plot(PepperPrice, plot.type = "single", col = 1:2)#
+legend("topleft", c("black", "white"), bty = "n",col = 1:2, lty = rep(1,2))
+adf.test(log(PepperPrice[, "white"]))
+pp.test(log(PepperPrice[, "white"]), type = "Z(t_alpha)")
+pepper_ers <- ur.ers(log(PepperPrice[, "white"]),#
+  type = "DF-GLS", model = "const", lag.max = 4)#
+summary(pepper_ers)
+pepper_ers <- ur.ers(log(PepperPrice[, "white"]), type = "DF-GLS", model = "const", lag.max = 4)#
+summary(pepper_ers)
+## package#
+library(tseries)#
+library(urca)#
+library(AER)#
+#
+data("PepperPrice")#
+plot(PepperPrice, plot.type = "single", col = 1:2)#
+legend("topleft", c("black", "white"), bty = "n",col = 1:2, lty = rep(1,2))#
+#
+## unit root tests#
+# Augmented Dickey-Fuller Test#
+# H0: non-stationary#
+# H1: stationary#
+adf.test(log(PepperPrice[, "white"]))#
+#
+# Phillips-Perron Unit Root Test#
+# H0: non-stationary#
+# H1: stationary#
+pp.test(log(PepperPrice[, "white"]), type = "Z(t_alpha)")#
+#
+# Elliott, Rothenberg \& Stock Unit Root Test#
+pepper_ers <- ur.ers(log(PepperPrice[, "white"]), type = "DF-GLS", model = "const", lag.max = 4)#
+summary(pepper_ers)#
+#
+## stationarity tests#
+kpss.test(log(PepperPrice[, "white"]))#
+# Kwiatkowski-Phillips-Schmidt-Shin (KPSS) test for the null hypothesis that x is level or trend stationary.#
+#
+## cointegration#
+po.test(log(PepperPrice))#
+pepper_jo <- ca.jo(log(PepperPrice), ecdet = "const", type = "trace")#
+summary(pepper_jo)#
+pepper_jo2 <- ca.jo(log(PepperPrice), ecdet = "const", type = "eigen")#
+summary(pepper_jo2)
+#### Co-integration and pairs trading#
+#
+# Source: http://faculty.chicagobooth.edu/ruey.tsay/teaching/bs41202/sp2017/lec10-17.pdf#
+#
+# Another good example of pairs trading can be found here: #
+# https://www.quantstart.com/articles/Cointegrated-Augmented-Dickey-Fuller-Test-for-Pairs-Trading-Evaluation-in-R#
+#
+library(urca)#
+library(forecast)#
+require(stats)#
+da = read.table("d-bhp0206.txt", header = T)#
+da1 = read.table("d-vale0206.txt", header = T)#
+bhp = log(da$adjclose)#
+vale = log(da1$adjclose)#
+bhp1 = ts(bhp, frequency = 252, start = c(2002,127))#
+vale1 = ts(vale, frequency = 252, start = c(2002,127))#
+#
+# Plot the two series#
+quartz()#
+plot(bhp1, type = 'l', col = "blue", ylim = c(0.45,3.7), ylab = "Stock Price ($)", main = "Pairs Trading Example")#
+lines(vale1, type = 'l', col = "red")#
+legend(2003, 3.5, c("BHP", "Vale"), fill = c("blue", "red"), cex = 1.2, bty = 'n')#
+#
+# Try a simple regression of S1 on S2#
+mreg = lm(bhp~vale)#
+summary(mreg)#
+#
+# Perform the Johansen Test#
+x = cbind(bhp, vale)#
+m1 = ar(x)#
+m1$order#
+m2 = ca.jo(x, K = 2)#
+summary(m2)#
+m3 = ca.jo(x, K = 2, type = c("trace"))#
+summary(m3)#
+# Compute the co-intergration expression#
+wt = bhp1 - 0.718 * vale1#
+quartz()#
+plot(wt, type = 'l', ylab = "wt = BHP - 0.72Vale", main = "Co-integration Relation")#
+abline(h = c(1.82), col = "red")#
+legend(2003, 1.95, c("wt", "E[wt] = 1.82"), fill = c("black","red"))#
+#
+quartz()#
+tsdisplay(wt)#
+#
+# Now that we have μ = 1.82 and 𝝲 = 0.72 --> Trade#
+#
+# (1) Buy Stock 1 and short 𝝲 shares of Stock 2 when the wt = μ - 𝝳. #
+# (2) Sell Stock 1 and buy 𝝲 shares of Stock 2,when wt+h = μ + 𝝳#
+# (3) Profit: r(h) = wt+h  - wt = μ + 𝝳#
+# Some practical considerations: #
+# The threshold is chosen so that the profit out-weights the costs of two trading. In high frequency, must be greater than trading slippage, which is the same linear combination of bid-ask spreads of the two stock, i.e. bid-ask spread of Stock 1 + ⇥(bid-ask spread) of Stock 2.  #
+# Speed of mean-reverting of wt plays an important role as h is directly related to the speed of mean-reverting. #
+# There are many ways available to search for co-integrating pairs of stocks. For example, via fundamentals, risk factors, etc. #
+# For unit-root and co-integration tests, see the textbook and ref- erences therein. #
+#
+# We can now fit a model to wt and forecast or simply forcst using ETS#
+#
+# Using ETS#
+quartz()#
+plot(forecast(wt))#
+#
+quartz()#
+tsdiag(ets(wt))
+library(forecast)
+library(urca) # for ca.jo()#
+library(forecast)#
+require(stats)
+help(auto.arima)
+da = read.table("d-bhp0206.txt", header = T)#
+da1 = read.table("d-vale0206.txt", header = T)#
+bhp = log(da$adjclose)#
+vale = log(da1$adjclose)#
+bhp1 = ts(bhp, frequency = 252, start = c(2002,127))#
+vale1 = ts(vale, frequency = 252, start = c(2002,127))#
+#
+# Plot the two series#
+quartz()#
+plot(bhp1, type = 'l', col = "blue", ylim = c(0.45,3.7), ylab = "Stock Price ($)", main = "Pairs Trading Example")#
+lines(vale1, type = 'l', col = "red")#
+legend(2003, 3.5, c("BHP", "Vale"), fill = c("blue", "red"), cex = 1.2, bty = 'n')#
+#
+quartz()#
+plot((bhp1 - mean(bhp1)) / sd(bhp1), type = 'l', col = "blue", ylab = "Z", main = "Pairs Trading Example (Standardized)")#
+lines((vale1 - mean(vale1)) / sd(vale1), type = 'l', col = "red")#
+legend(x = "topleft", c("BHP", "Vale"), fill = c("blue", "red"), cex = 1.2, bty = 'n')#
+#
+# Try a simple regression of S1 on S2#
+mreg = lm(bhp ~ vale)#
+summary(mreg)
+# Perform the Johansen Test#
+x = cbind(bhp, vale)#
+m1 = ar(x)#
+m1$order # 2#
+m2 = ca.jo(x, K = 2) # 1 and -\gamma#
+summary(m2)#
+m3 = ca.jo(x, K = 2, type = c("trace"))#
+summary(m3)
+# Compute the co-intergration expression#
+wt = bhp1 - 0.718 * vale1#
+quartz()#
+plot(wt, type = 'l', ylab = "wt = BHP - 0.72Vale", main = "Co-integration Relation")#
+abline(h = c(1.82), col = "red")#
+legend(2003, 1.95, c("wt", "E[wt] = 1.82"), fill = c("black", "red"))#
+#
+quartz()#
+tsdisplay(wt)
+# Using ETS#
+quartz()#
+plot(forecast(wt))
+quartz()#
+plot(forecast(wt))
+quartz()#
+plot(forecast(wt)) # From ETS#
+abline(h = c(1.82), col = "red")
+quartz()#
+tsdiasplay(ets(wt))
+quartz()#
+tsdisplay(ets(wt))
+quartz()#
+ets(wt)
+plot(ets(wt))
+## package#
+library(tseries)#
+library(urca)#
+library(AER)
+data("PepperPrice")#
+plot(PepperPrice, plot.type = "single", col = 1:2)#
+legend("topleft", c("black", "white"), bty = "n",col = 1:2, lty = rep(1,2))
+adf.test(log(PepperPrice[, "white"]))
+adf.test(log(PepperPrice[, "black"]))
+pp.test(log(PepperPrice[, "white"]), type = "Z(t_alpha)")
+help(kpss.test)
+help(Computes the Kwiatkowski-Phillips-Schmidt-Shin (KPSS) test for the null hypothesis that x is level or trend stationary.)
+help(ur.ers)
+po.test(log(PepperPrice))#
+pepper_jo <- ca.jo(log(PepperPrice), ecdet = "const", type = "trace")#
+summary(pepper_jo)#
+pepper_jo2 <- ca.jo(log(PepperPrice), ecdet = "const", type = "eigen")#
+summary(pepper_jo2)
+po.test(log(PepperPrice))
+help(po.test)
+help(ca.jo)
+pepper_jo@teststat[2]
+pepper_jo@cval
+pepper_jo@teststat[1]
+pepper_jo@teststat[2]#
+pepper_jo@teststat[1]#
+pepper_jo@cval
+pepper_jo <- ca.jo(log(PepperPrice), ecdet = "const", type = "trace")#
+summary(pepper_jo)
+pepper_jo2 <- ca.jo(log(PepperPrice), ecdet = "const", type = "eigen")#
+summary(pepper_jo2)
+po.test(log(PepperPrice))
+VARselect(PepperPrice)
+library(VAR)
+library(var)
+library(rvar)
+library(vars)
+VARselect(PepperPrice)
+pepper_jo <- ca.jo(log(PepperPrice), k = 2, ecdet = "const", type = "trace")
+help(ca.jo)
+summary(pepper_jo)
+pepper_jo2 <- ca.jo(log(PepperPrice), ecdet = "const", type = "eigen", K = 2)
+summary(pepper_jo2)
+lm(PepperPrice$white ~ PepperPrice$black)
+lm(PepperPrice[, "white"] ~ PepperPrice[, "black"])
+model = lm(PepperPrice[, "white"] ~ PepperPrice[, "black"])
+model = lm(PepperPrice[, "white"] ~ PepperPrice[, "black"])#
+adf.test(model$residual)
+x = cbind(bhp, vale)#
+m1 = ar(x)#
+m1$order # 2#
+m2 = ca.jo(x, K = 2) # 1 and -\gamma#
+summary(m2)#
+m3 = ca.jo(x, K = 2, type = c("trace"))#
+summary(m3)
+x = x1 + x2 + x3 + 100 * rnorm(100)#
+#
+par(mfrow = c(2,2))#
+plot.ts(x1, ylim = c(-20,20), main = "freq = 0.06")#
+plot.ts(x2, ylim = c(-20,20), main = "freq = 0.10")#
+plot.ts(x3, ylim = c(-20,20), main = "freq = 0.40")#
+plot.ts(x,  ylim = c(-20,20), main = "Sum")#
+#
+par(mfrow = c(1,1))#
+plot.ts(x,  ylim = c(min(x), max(x)), main = "Sum")#
+#
+par(mfrow = c(1,1))#
+P = abs(2*fft(x)/100)^2#
+f = 0:50/100
+library(forecast) #
+#
+t = 1:100#
+#
+x1 = 2*cos(2*pi*t*6/100)  + 3*sin(2*pi*t*6/100)#
+x2 = 4*cos(2*pi*t*10/100) + 5*sin(2*pi*t*10/100)#
+x3 = 6*cos(2*pi*t*40/100) + 7*sin(2*pi*t*40/100)#
+#
+x = x1 + x2 + x3 + 100 * rnorm(100)#
+#
+par(mfrow = c(2,2))#
+plot.ts(x1, ylim = c(-20,20), main = "freq = 0.06")#
+plot.ts(x2, ylim = c(-20,20), main = "freq = 0.10")#
+plot.ts(x3, ylim = c(-20,20), main = "freq = 0.40")#
+plot.ts(x,  ylim = c(-20,20), main = "Sum")#
+#
+par(mfrow = c(1,1))#
+plot.ts(x,  ylim = c(min(x), max(x)), main = "Sum")#
+#
+par(mfrow = c(1,1))#
+P = abs(2*fft(x)/100)^2#
+f = 0:50/100
+P
+p[p>20]
+P[P>20]
+library(forecast) #
+#
+t = 1:100#
+#
+x1 = 2*cos(2*pi*t*6/100)  + 3*sin(2*pi*t*6/100)#
+x2 = 4*cos(2*pi*t*10/100) + 5*sin(2*pi*t*10/100)#
+x3 = 6*cos(2*pi*t*40/100) + 7*sin(2*pi*t*40/100)#
+#
+x = x1 + x2 + x3 + 10 * rnorm(100)#
+#
+par(mfrow = c(2,2))#
+plot.ts(x1, ylim = c(-20,20), main = "freq = 0.06")#
+plot.ts(x2, ylim = c(-20,20), main = "freq = 0.10")#
+plot.ts(x3, ylim = c(-20,20), main = "freq = 0.40")#
+plot.ts(x,  ylim = c(-20,20), main = "Sum")#
+#
+par(mfrow = c(1,1))#
+plot.ts(x,  ylim = c(min(x), max(x)), main = "Sum")#
+#
+par(mfrow = c(1,1))#
+P = abs(2*fft(x)/100)^2#
+f = 0:50/100
+par(mfrow = c(1,1))#
+P = abs(2*fft(x)/100)^2#
+f = 0:50/100#
+plot(f, P[1:51], type = "o", xlab = "Frequency", ylab = "Periodogram")
+x = x1 + x2 + x3 + 5 * rnorm(100)#
+#
+par(mfrow = c(2,2))#
+plot.ts(x1, ylim = c(-20,20), main = "freq = 0.06")#
+plot.ts(x2, ylim = c(-20,20), main = "freq = 0.10")#
+plot.ts(x3, ylim = c(-20,20), main = "freq = 0.40")#
+plot.ts(x,  ylim = c(-20,20), main = "Sum")#
+#
+par(mfrow = c(1,1))#
+plot.ts(x,  ylim = c(min(x), max(x)), main = "Sum")#
+#
+par(mfrow = c(1,1))#
+P = abs(2*fft(x)/100)^2#
+f = 0:50/100#
+plot(f, P[1:51], type = "o", xlab = "Frequency", ylab = "Periodogram")
+P[P>20]

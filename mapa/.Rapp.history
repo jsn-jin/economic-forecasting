@@ -1,0 +1,35 @@
+library(readxl)#
+library(MAPA)#
+set.seed(1)
+data = read_excel("hpi.xls", col_names = FALSE)#
+LA_ts = ts(data[[1]], start = 1975, freq = 12)#
+RI_ts = ts(data[[2]], start = 1975, freq = 12)
+plot(LA_ts)#
+lines(RI_ts, col = "red")
+mapasimple(LA_ts, outplot = 2, paral = 2)
+help(png)
+png("mapa.png", width = 600, height = 600)#
+mapasimple(LA_ts, outplot = 2, paral = 2)#
+dev.off()
+png("mapa.png", width = 1200, height = 1200)#
+mapasimple(LA_ts, outplot = 2, paral = 2)#
+dev.off()
+png("mapa.png", width = 450, height = 450)#
+mapasimple(LA_ts, outplot = 2, paral = 2)#
+dev.off()
+mapafit <- mapaest(LA_ts, outplot = 2, paral = 2)#
+plot(mapafit)
+help(mapaest)
+png("mapaets.png", width = 450, height = 450)#
+plot(mapafit)#
+dev.off()
+help(mapafor)
+mapafor(y = LA_ts, mapafit = mapafit, ifh = 12, fh = 0)
+mapafit <- mapaest(LA_ts, paral = 2)#
+mapafor(LA_ts, mapafit)
+mapa(LA_ts, conf.lvl = c(0.8,0.9,0.95,0.99), outplot = 1)
+help(mapa)
+help(mapaest)
+png("mapaall.png", width = 450, height = 450)#
+mapa(LA_ts, conf.lvl = c(0.8,0.9,0.95,0.99), outplot = 1)#
+dev.off()

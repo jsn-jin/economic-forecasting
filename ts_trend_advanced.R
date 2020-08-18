@@ -1,11 +1,11 @@
-#***********************************************
-# Date: 04/13/2015
+#********************************************************************************
+# Date: 8/18/2020
 # Comment(s): R code example for fitting/forecasting a trend to ts data.
 # Data File(s): beer.csv
-#***********************************************
+#********************************************************************************
 # Variable Definitions
 # beer = monthly beer production in Australia from Jan 1956 - Aug 1995
-#************************************************
+#********************************************************************************
 
 # Set your 'working directory' to the folder where all the data and respective codes are located.
 
@@ -18,7 +18,7 @@ require(stats)
 library(tis)
 
 # Read in the data into a data file
-beer = read.csv("beer.csv", header = T, dec = ",", sep = ";")
+beer = read.csv("beer.csv", header = T, dec = ",", sep = ";") # dec: decimal points
 beer = ts(beer[,1], start = 1956, freq = 12)
 plot(beer, xlab = "Year", ylab = "Monthly Beer Production")
 
@@ -26,7 +26,7 @@ plot(beer, xlab = "Year", ylab = "Monthly Beer Production")
 
 # Model 1: Log-quadratic model
 lbeer <- log(beer)
-t <- seq(1956, 1995.2, length = length(beer))
+t <- seq(1956, 1995 + 8/12, length = length(beer))
 t2 <- t^2
 quartz()
 plot(lbeer, xlab = "Year", ylab = "Log(Beer Production)")
@@ -87,28 +87,30 @@ quartz()
 plot(beer, xlim = c(1956,1999), xlab = "Year", ylab = "Beer Production")
 lines(predict(beer.hw, n.ahead = 48), col = 2)
 
-### -------------------- lecture 15 ------------------------
-# 3 competing models
-# Holt-Winters
+### -------------------- Compare Different Models (Optional) ------------------------ ###
+# 3 Competing Models
+# (1) Holt-Winters
 beer.hw <- HoltWinters(beer)
-plot(forecast(beer.hw))	# the band is very narrow
+plot(forecast(beer.hw))	# The band is very narrow
+
+# (2) Auto Arima
+auto.arima(beer)	# ARIMA(0,1,3)(1,1,2)[12] 
+plot(forecast(auto.arima(beer)))		
+# Looks very similar to Holt-Winters	. Could be very hard to decide.
+							
+# (3) ETS
+plot(ets(beer))			# ETS(M,A,M) 
+plot(forecast(ets(beer)))
+
+
 accuracy(forecast(beer.hw))
 accuracy(forecast(auto.arima(beer)))
-# MAPE: we will go for auto.arima with this one
-# don't go by training performance. We have to look at the testing.
-# split up this by training and testing
-# auto.arima may overfit the training data
-
-# Auto Arima
-auto.arima(beer)	# ARIMA(0,1,3)(1,1,2)[12] 
-plot(forecast(auto.arima(beer)))		# looks very similar to Holt-Winters	
-									# could be very hard to decide
-									
-# ETS
-plot(ets(beer))		# ETS(M,A,M) 
 accuracy(forecast(ets(beer)))	# error -> cycle in ARIMA
-plot(forecast(ets(beer)))
-# -------------------------------------------------------------
+# MAPE: we will go for auto.arima with this one
+# However, don't go by training performance. We have to look at the testing.
+# auto.arima may overfit the training data.
+# TODO: split up the data by training and testing.
+# ---------------------------------------------------------------------------------------
 
 # Forecast
 quartz()

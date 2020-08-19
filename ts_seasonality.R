@@ -1,12 +1,12 @@
-#***********************************************
-# Date: 04/01/2019
+#********************************************************************************
+# Date: 08/19/2020
 # Comment(s): R code example for fitting/forecasting a seasonality to ts data.
 # Data File(s): beer.csv, and housing.dat
-#***********************************************
+#********************************************************************************
 # Variable Definitions
 # beer = monthly beer production in Australia from Jan 1956 - Aug 1995
 # house = monthly housing starts from 1946 to 1993
-#************************************************
+#********************************************************************************
 
 # Clear all variables and prior sessions
 rm(list=ls(all=TRUE))
@@ -22,6 +22,7 @@ y = ts(rnorm(120, 0, 3) + 20 * sin(2 * pi * (1:120) / 12), frequency = 12)
 fit1 = tslm(y ~ trend )
 fit2 = tslm(y ~ season)
 fit3 = tslm(y ~ trend + season)
+
 quartz()
 par(mfrow = c(3,1))
 plot(y, main = "Time Series Data: Trend")
@@ -35,9 +36,16 @@ lines(fit3$fitted.values, col="red")
 # Read in the beer data into a data file
 beer = read.csv("beer.csv", header = T, dec = ",", sep = ";")
 beer = ts(beer[,1], start = 1956, freq = 12)
+t <- seq(1956, 1995 + 8/12, length = length(beer))
+quartz()
+plot(beer, xlab = "Year", ylab = "Monthly Beer Production")
 
 # Lets look at the beer data once again:
 lbeer = log(beer)
+quartz()
+plot(beer, xlab = "Year", ylab = "Monthly Beer Production")
+quartz()
+plot(lbeer, xlab = "Year", ylab = "Log(Beer Production)")
 
 # Compare 3 different fit models:
 fit1 = tslm(lbeer ~ trend )
@@ -45,7 +53,7 @@ fit2 = tslm(lbeer ~ season)
 fit3 = tslm(lbeer ~ trend + season)
 
 #--------------------- DUMMY TEST ---------------------
-testmd1 = lm(lbeer~time())
+testmd1 = lm(lbeer~time(lbeer))
 testmd1
 
 dummy_trend = seq(1:length(beer)) # Create time dummy
@@ -54,6 +62,15 @@ testmd2 = lm(lbeer~dummy_trend)
 testmd2
 
 fit1
+
+# Note: testmd2 and fit1 give the same coefficients.
+# tslm uses time dummy
+
+plot(lbeer, xlab = "Year", ylab = "Log(Beer Production)", lwd = 2, col = 'skyblue3')
+lines(t, testmd1$fit, col = "red3", lwd = 5)
+lines(t, testmd2$fit, col = "purple", lwd = 3) # same line
+lines(t, fit1$fit, col = "green", lwd = 1) # same line
+
 #-------------------------------------------------------
 
 quartz()

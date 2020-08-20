@@ -95,8 +95,7 @@ lines(fit2$fitted.values, col = "red")
 plot(forecast(fit3, h = 60), main = "Model 3: Forecast Trend + Seasonality")
 lines(fit3$fitted.values, col = "red")
 
-
-# The forecast above can be improved considerably via 'ets'
+# (Optional) The forecast above can be improved considerably via 'ets'
 fit = ets(lbeer) # ExponenTial Smoothing state space model
 quartz()
 plot(fit)
@@ -124,6 +123,7 @@ quartz()
 plot(stl(house_ts, s.window = "periodic"))
 quartz()
 plot(stl(house_ts, s.window = 11))
+
 forecast(house_ts)
 summary(forecast(house_ts))
 
@@ -148,18 +148,14 @@ par(mfrow = c(2,1))
 plot(fit2$coef, type = 'l', ylab = 'Seasonal Factors', xlab = "Season", lwd = 2, main = "Plot of Seasonal Factors")
 hist(fit2$res, main = "Histogram of Residuals", col = "skyblue3")
 
-# We can improve the forecast using ets
-quartz()
-plot(house_ts, s.window = "periodic")
-forecast(house_ts)
-plot(forecast(house_ts))
-
+# (Optional) We can improve the forecast using ets
 fit = ets(house_ts)
 quartz()
 plot(fit)
 accuracy(fit)
 plot(forecast(fit, level = c(50,80,95), h = 12))
 
+# -------------------- (Optional) -------------------- #
 # Seasonality Decomposition using the library 'seasonal'
 # See: https://otexts.com/fpp2/components.html
 

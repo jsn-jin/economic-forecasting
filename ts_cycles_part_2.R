@@ -1,8 +1,8 @@
-#***********************************************
-# Date: 04/22/2015
+#**********************************************************************************************
+# Date: 08/21/2020
 # Comment(s): R code example for characterizing cycles in ts data.
 # Data File(s): The observations are generated via random walks.
-#***********************************************
+#**********************************************************************************************
 
 # Clear all variables and prior sessions
 rm(list=ls(all=TRUE))
@@ -19,6 +19,7 @@ tsdisplay(x1)
 quartz()
 acf(diff(x1))
 
+
 #2. Xt = Zt (White Noise)
 x2 = e = rnorm(1000)
 for (t in 2:1000) {
@@ -28,6 +29,7 @@ quartz()
 tsdisplay(x2) # White Noise
 quartz()
 acf(diff(x2))
+
 
 #3. Xt = -0.3Xt-1 + Zt (AR1)
 x3 = e = rnorm(1000)
@@ -49,6 +51,7 @@ tsdisplay(x3.1)
 quartz()
 acf(diff(x3.1))
 
+
 #4. Xt = sin(pi * t/3) + Zt
 x4 = e = rnorm(1000)
 for (t in 2:1000) {
@@ -59,6 +62,7 @@ plot(x4, type = 'l', main = "Original Time Series of the Data")
 acf(x4, main = "ACF")
 acf(diff(x4), main = "ACF (First Difference)", ylab = expression(ACF(Delta)))
 
+
 # Plot the autocorrelation, autocovariance, and partial autocorrelation functions
 quartz()
 par(mfrow = c(2,2))
@@ -66,6 +70,7 @@ plot(x4, type ='l')
 acf(x4, type = "correlation")
 acf(x4, type = "covariance")
 acf(x4, type = "partial")
+
 
 # Plot the autocorrlation function of the First and Second difference
 quartz()

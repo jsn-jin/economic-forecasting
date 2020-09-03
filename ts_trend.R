@@ -38,7 +38,7 @@ ts.plot(male_ts)
 # detach(z)
 
 
-#-------------[1] TREND FITTING--------------
+# ---------------------------- [1] TREND FITTING ----------------------------- #
 
 # Linear Fit
 m1 = lm(male_ts ~ t)
@@ -52,7 +52,7 @@ lines(t, m1$fit, col = "red3", lwd = 2)
 plot(t, m1$res, ylab = "Residuals", type = 'l', xlab = "Time")
 par(mfrow = c(1,1))
 
-#-------------[*] TIME DUMMY TESTING--------------
+## -------------[*] TIME DUMMY TESTING-------------- ##
 mtest1 <- tslm(male_ts ~ trend)
 mtest1
 
@@ -65,7 +65,7 @@ plot(male_ts, ylab = "Participation Rate (Male)", xlab = "Time", lwd = 2, col = 
 lines(t, m1$fit, col = "red3", lwd = 2)
 lines(t, mtest$fit, col = "purple", lwd = 2) # same line
 lines(t, mtest2$fit, col = "green", lwd = 2) # same line
-#------------------------------------------------------------------------------------------
+## -------------------------------------------------- ##
 
 # Quadratic Fit
 m2 = lm(male_ts ~ t + I(t^2))
@@ -95,7 +95,7 @@ plot(t, residuals(m4), ylab = "Residuals", type = 'l',xlab = "Time")
 summary(m4)
 
 
-#-------------[2] MODEL SELECTION--------------
+# ----------------------- [2] MODEL SELECTION ------------------------ #
 # Compare models using AIC and BIC
 AIC(m1,m2,m3,m4)
 BIC(m1,m2,m3,m4)
@@ -105,7 +105,7 @@ plot(stl(male_ts, s.window = "periodic")) # Seasonal + Trend + Remainder (cycles
 # stl() is super powerful
 
 
-#-------------[3] TREND FORECASTING--------------
+# ----------------------- [3] TREND FORECASTING ------------------------ #
 # Linear
 tn = data.frame(t = seq(1992,1999))
 pred = predict(lm(male_ts ~ t), tn, se.fit = TRUE)
@@ -127,7 +127,7 @@ plot(male_ts, ylab = "Participation Rate (Male)", xlab = "Time", lwd = 2, col = 
 matplot(tn$t, cbind(pred.clim, pred.plim[,-1]), lty = c(1,1,1,3,3), type = "l", lwd = 2, ylab = "predicted y", xlab = "Time", add = TRUE)
 
 
-#-------------[4] Holt-Winters Filter--------------
+# ----------------------- [4] Holt-Winters Filter ------------------------ #
 hwfit <- HoltWinters(male_ts)
 quartz()
 hwpred <- predict(hwfit, 60, prediction.interval = TRUE, level = 0.5)
